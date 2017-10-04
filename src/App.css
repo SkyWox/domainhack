@@ -1,5 +1,7 @@
 .App {
   text-align: center;
+  font-family: "Open Sans", sans-serif;
+  width: 100%;
 }
 
 .App-logo {
@@ -20,6 +22,18 @@
 
 .App-intro {
   font-size: large;
+}
+
+.input {
+  font-size: 20px;
+  height: 40px;
+  box-sizing: border-box;
+  border-radius: 7px;
+  border-style: none;
+}
+
+.URL{
+  list-style-type: none;
 }
 
 @keyframes App-logo-spin {

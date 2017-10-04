@@ -1,6 +1,7 @@
 {
   "name": "domainhack",
   "version": "0.1.0",
+  "homepage" : "domain.skywox.me",
   "private": true,
   "dependencies": {
     "react": "^16.0.0",

@@ -1,5 +1,6 @@
 from views import index, whois
-project_root = '../'
+import os
+project_root = os.getcwd()
 
 def setup_routes(app):
     app.router.add_get('/', index)
@@ -7,6 +8,6 @@ def setup_routes(app):
     #have to figure out what the heck they mean with this
     #http://aiohttp.readthedocs.io/en/stable/tutorial.html#aiohttp-tutorial
     # > static files
-    #app.router.add_static('/static/',
-    #                        path=str(project_root +'/' + 'static'),
-    #                        name='static')
+    app.router.add_static('/static/',
+                            path=str(os.getcwd() +'\client\\build\static'),
+                            name='static')

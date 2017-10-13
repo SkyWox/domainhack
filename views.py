@@ -2,8 +2,7 @@ from aiohttp import web
 import aiohttp
 
 async def index(request):
-    data = {'first' : 'skylar'}
-    return web.Response(text=data['first'])
+    return web.FileResponse('./client/build/index.html')
 
 async def whois(request):
     name = 'cornstuff.com'

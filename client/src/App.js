@@ -1,14 +1,28 @@
 import React, { Component } from 'react';
 import './App.css';
+import AvailCheck from './AvailCheck.js'
+
 var TLD = require('./TLD')
 const defaultname = ''
 
+
 class App extends Component {
   componentWillMount(){
-
+    console.log(TLD.length)
     this.setState({
-      name : defaultname, TLDs : TLD, matchTLD : []
+      name : defaultname, TLDs : TLD, matchTLD : [], available : true
     })
+  }
+
+  componentDidMount(){
+    //update TLD list
+    var requestURL = new Request('/tld')
+    fetch(requestURL)
+    .then(res => res.json())
+    .then(res => {
+      this.setState({ TLDs : res})
+    })
+    .catch()
   }
 
   updateName(e) {
@@ -32,6 +46,8 @@ class App extends Component {
       return b.length - a.length //||  sort by length, if equal then
              //a.localeCompare(b);     sort by dictionary order -> change to completeness?
     })
+    //add common TLDs to front of lists
+    matchTLD.unshift(name+'.com', name+'.net',name+'.org',name+'.io')
 
     this.setState({
       name : name,
@@ -45,9 +61,10 @@ class App extends Component {
           <h1>
             hack a domain
           </h1>
+
           <h1>
             <input autoFocus={true} type='text' spellCheck = 'false' size ='30'
-              autoComplete = 'false' autocorrect = 'false' maxLength ='63'
+              autoComplete = 'false' autoCorrect = 'false' maxLength ='63'
               placeholder = "Enter a name"
               value = {this.state.name}
               onChange={(e)=> this.updateName(e)}/>
@@ -58,12 +75,9 @@ class App extends Component {
               : <div>Please enter at least 3 characters</div>
           }
         <div className="suggestedURLs">
-          {this.state.matchTLD.map((tld, index) =>
-          <li className="URL" key={index}>
-            <a target="_blank" href={"https://google.com/search?q=" + tld}>
-            {tld}
-          </a>
-          </li>)}
+          {this.state.matchTLD.map((domain, index) =>
+            <AvailCheck domain = {domain} key={index}/>
+          )}
         </div>
       </div>
     );

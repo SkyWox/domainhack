@@ -4,21 +4,10 @@ var favicon = require('serve-favicon');
 var logger = require('morgan');
 var cookieParser = require('cookie-parser');
 var bodyParser = require('body-parser');
-var lottoGen = require('./lottoGen.js');
-const lottoList = require("./lottoList.json")
-//var freshCheck = require('./freshCheck.js');
 var index = require('./routes/index');
 var users = require('./routes/users');
-
-var lottoSpecs = function (name) {
-  var specs = {}
-    for (var i in lottoList){
-      if (lottoList[i].name == name){
-        specs = lottoList[i]
-      }
-    }
-    return specs
-}
+var whois = require('./routes/whois');
+var tld = require('./routes/tld')
 
 var app = express();
 
@@ -36,49 +25,8 @@ app.use(express.static(path.join(__dirname, 'client/build')));
 
 app.use('/', index);
 app.use('/users', users);
-
-app.get('/api/lottoList'), (req, res) => {
-  var nameRes = []
-  switch (req.query.name) {
-    case 'name':
-        for (var i in lottoList){
-          nameRes[i] = lottoList.name[i]
-        }
-      break;
-      case 'proper':
-        console.log('in proper')
-        for (var i in lottoList){
-          nameRes[i] = lottoList.proper[i]
-        }
-      break;
-  }
-  console.log(nameRes[0])
-  res.json(nameRes)
-
-}
-
-app.get('/api/specs', (req, res) => {
-  res.json(lottoSpecs(req.query.name))
-})
-
-app.get('/api/getnumbers', (req, res) => {
-    //successfully getting fresh number
-    success = false;
-    const mint = req.query.mint;
-    const name = req.query.name;
-    const date = req.query.date;
-
-    const specs = lottoSpecs(name)
-
-    //keep getting new numbers until mint is happy
-    while (success == false){
-      numbers = lottoGen(specs)
-      //success = freshCheck(numbers, mint)
-      success = true;
-    }
-
-    res.json(numbers);
-})
+app.use('/whois', whois);
+app.use('/tld', tld);
 
 // The "catchall" handler: for any request that doesn't
 // match one above, send back React's index.html file.
@@ -89,7 +37,7 @@ app.get('*', (req, res) => {
 const port = process.env.PORT || 5000;
 app.listen(port);
 
-console.log(`Number generator listening on ${port}`);
+console.log(`Express server listening on ${port}`);
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {

@@ -36,6 +36,41 @@
   list-style-type: none;
 }
 
+a{
+  color: black;
+  text-decoration: underline;
+}
+
+a#unknown{
+
+}
+
+a#available
+{
+  color: rgb(173, 232, 134);
+  background-color: rgb(35, 176, 0);
+  text-decoration: underline;
+}
+
+a#available:hover{
+  color: rgb(77, 175, 12);
+}
+
+a#taken{
+  color: red;
+  text-decoration: none;
+}
+
+a#taken:hover{
+  color: pink;
+}
+
+a#bad{
+  text-indent: 100%;
+  white-space: nowrap;
+  overflow: hidden;
+}
+
 @keyframes App-logo-spin {
   from { transform: rotate(0deg); }
   to { transform: rotate(360deg); }

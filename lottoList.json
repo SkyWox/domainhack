@@ -1,5 +1,0 @@
-[
-  {"name": "powerball", "state": "all", "proper": "Powerball", "numVanilla": 5, "vanillaMax": 69, "numSpecial": 1, "specialMax": 26},
-  {"name": "superlplus", "state": "ca", "proper": "Super Lotto Plus", "numVanilla": 5, "vanillaMax": 47, "numSpecial": 1, "specialMax": 27},
-  {"name": "megamill", "state": "all", "proper": "Mega Millions", "numVanilla": 6, "vanillaMax": 75, "numSpecial": 1, "specialMax": 15}
-]

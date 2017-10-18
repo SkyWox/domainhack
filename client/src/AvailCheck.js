@@ -12,8 +12,8 @@ class AvailCheck extends Component {
     this.setState({ domain : this.props.domain })
   }
 
-  componentWillReceiveProps (){
-    this.setState({ domain : this.props.domain})
+  componentWillReceiveProps (nextProps){
+    this.setState({ domain : nextProps.domain})
   }
 
   componentDidMount(){

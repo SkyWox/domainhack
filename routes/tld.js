@@ -18,7 +18,8 @@ router.get('/', function(req, res, next) {
     res.json(resp.data)
   })
   .catch(error => {
-    console.log(error);
+    res.json(['failure'])
+    console.log(error.response);
     }
   )
 

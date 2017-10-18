@@ -24,12 +24,11 @@
   font-size: large;
 }
 
-.input {
-  font-size: 20px;
-  height: 40px;
-  box-sizing: border-box;
+input {
+  font-size: 45px;
+  height: 55px;
   border-radius: 7px;
-  border-style: none;
+  border-style: groove;
 }
 
 .URL{
@@ -47,13 +46,13 @@ a#unknown{
 
 a#available
 {
-  color: rgb(173, 232, 134);
-  background-color: rgb(35, 176, 0);
+  background-color: rgb(173, 232, 134);
+  color: rgb(35, 176, 0);
   text-decoration: underline;
 }
 
 a#available:hover{
-  color: rgb(77, 175, 12);
+  color: black;
 }
 
 a#taken{

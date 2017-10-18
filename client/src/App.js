@@ -13,119 +13,45 @@ class App extends Component {
     })
   }
 
-  /*componentDidMount(){
+  componentDidMount(){
     //update TLD list
     var requestURL = new Request('/tld')
     fetch(requestURL)
     .then(res => res.json())
     .then(res => {
-      this.setState({ TLDs : res})
+      if (res[0] !== 'failure'){
+        this.setState({
+          TLDs : res.toString().toUpperCase().split(","),
+          //Rebuild the array making all domains single layer for matching
+          TLDsNoDot : res.toString().replace(/\./g, "").toUpperCase().split(",")
+        })
+      }
     })
     .catch()
-  }*/
-
-  /*componentDidUpdate(){
-    const name = this.state.name
-    const TLDs = this.state.TLDs
-    var matchTLD = []
-
-    function compareTLDs(){
-      console.log("in compareTLDs")
-      for (var a in TLDs){
-        if(name.indexOf(TLDs[a]) > 0){
-          const b = name.indexOf(TLDs[a])
-          matchTLD.push((name.slice(0,b) + "." + TLDs[a]))
-        }
-      }
-      return Promise.resolve()
-    }
-
-    function sortByL(){
-      console.log('in sortByL')
-      //Sort by length (longer = more complete)
-      matchTLD.sort(function(a, b) {
-        return b.length - a.length //||  sort by length, if equal then
-               //a.localeCompare(b);     sort by dictionary order -> change to completeness?
-      })
-      return Promise.resolve()
-    }
-
-    function addCommon(){
-      //add common TLDs to front of lists
-      //matchTLD.unshift(name+'.COM', name+'.NET',name+'.ORG',name+'.IO')
-      return Promise.resolve()
-    }
-
-    if (name.length < 3){
-      //too short!
-    }else{
-      compareTLDs().then(sortByL()).then(addCommon()).then(
-        this.setState({
-          flag : 'in updateName pt 2',
-          matchTLD : matchTLD
-        })
-      ).then(console.log('this.state.name is ' + this.state.name))
-      /*for (var a in TLDs){
-        if(name.indexOf(TLDs[a]) > 0){
-          const b = name.indexOf(TLDs[a])
-          matchTLD.push((name.slice(0,b) + "." + TLDs[a]))
-        }
-      }
-  }*/
+  }
 
   updateName(e) {
     this.setState({name : e.target.value.toUpperCase()})
     const name = e.target.value.toUpperCase()
     const TLDs = this.state.TLDs
+    const TLDsNoDot = this.state.TLDsNoDot
+
     var matchTLD = []
 
-    function compareTLDs(){
-      console.log("in compareTLDs")
+    if (name.length < 3){
+
+    }else{
       for (var a in TLDs){
-        if(name.indexOf(TLDs[a]) > 0){
-          const b = name.indexOf(TLDs[a])
+        if(name.indexOf(TLDsNoDot[a]) > 0 &&
+          TLDsNoDot[a].length + name.indexOf(TLDsNoDot[a]) >= name.length){
+          const b = name.indexOf(TLDsNoDot[a])
           matchTLD.push((name.slice(0,b) + "." + TLDs[a]))
         }
       }
-      return Promise.resolve()
-    }
+      matchTLD.unshift(name+'.COM', name+'.NET',name+'.ORG',name+'.IO')
 
-    function sortByL(){
-      console.log('in sortByL')
-      //Sort by length (longer = more complete)
-      matchTLD.sort(function(a, b) {
-        return b.length - a.length //||  sort by length, if equal then
-               //a.localeCompare(b);     sort by dictionary order -> change to completeness?
-      })
-      return Promise.resolve()
+      this.setState({matchTLD : matchTLD})
     }
-
-    function addCommon(){
-      //add common TLDs to front of lists
-      //matchTLD.unshift(name+'.COM', name+'.NET',name+'.ORG',name+'.IO')
-      return Promise.resolve()
-    }
-
-    if (name.length < 3){
-      //too short!
-      this.setState({
-        name : name,
-        matchTLD : []
-      })
-    }else{
-      compareTLDs().then(sortByL()).then(addCommon()).then(
-        this.setState({
-          name : name,
-          flag : 'in updateName pt 2',
-          matchTLD : matchTLD
-        })
-      ).then(console.log('this.state.name is ' + this.state.name))
-      /*for (var a in TLDs){
-        if(name.indexOf(TLDs[a]) > 0){
-          const b = name.indexOf(TLDs[a])
-          matchTLD.push((name.slice(0,b) + "." + TLDs[a]))
-        }*/
-      }
   }
 
   render() {
@@ -136,7 +62,7 @@ class App extends Component {
           </h1>
 
           <h1>
-            <input autoFocus={true} type='text' spellCheck = 'false' size ='30'
+            <input autoFocus={true} type='text' spellCheck = 'false' size ='20'
               autoComplete = 'false' autoCorrect = 'false' maxLength ='63'
               placeholder = "Enter a name"
               value = {this.state.name}
@@ -156,5 +82,5 @@ class App extends Component {
     );
   }
 }
-
+//AvailCheck domain = {domain}
 export default App;

@@ -8,13 +8,12 @@ const defaultname = ''
 
 class App extends Component {
   componentWillMount(){
-    console.log(TLD.length)
     this.setState({
       name : defaultname, TLDs : TLD, matchTLD : [], available : true
     })
   }
 
-  componentDidMount(){
+  /*componentDidMount(){
     //update TLD list
     var requestURL = new Request('/tld')
     fetch(requestURL)
@@ -23,36 +22,110 @@ class App extends Component {
       this.setState({ TLDs : res})
     })
     .catch()
-  }
+  }*/
 
-  updateName(e) {
-    const name = e.target.value.toUpperCase()
+  /*componentDidUpdate(){
+    const name = this.state.name
     const TLDs = this.state.TLDs
     var matchTLD = []
 
-    if (name.length < 3){
-      matchTLD = []
-    }else{
+    function compareTLDs(){
+      console.log("in compareTLDs")
       for (var a in TLDs){
         if(name.indexOf(TLDs[a]) > 0){
           const b = name.indexOf(TLDs[a])
           matchTLD.push((name.slice(0,b) + "." + TLDs[a]))
         }
       }
+      return Promise.resolve()
     }
 
-    //Sort by length (longer = more complete)
-    matchTLD.sort(function(a, b) {
-      return b.length - a.length //||  sort by length, if equal then
-             //a.localeCompare(b);     sort by dictionary order -> change to completeness?
-    })
-    //add common TLDs to front of lists
-    matchTLD.unshift(name+'.com', name+'.net',name+'.org',name+'.io')
+    function sortByL(){
+      console.log('in sortByL')
+      //Sort by length (longer = more complete)
+      matchTLD.sort(function(a, b) {
+        return b.length - a.length //||  sort by length, if equal then
+               //a.localeCompare(b);     sort by dictionary order -> change to completeness?
+      })
+      return Promise.resolve()
+    }
 
-    this.setState({
-      name : name,
-      matchTLD : matchTLD
-    })
+    function addCommon(){
+      //add common TLDs to front of lists
+      //matchTLD.unshift(name+'.COM', name+'.NET',name+'.ORG',name+'.IO')
+      return Promise.resolve()
+    }
+
+    if (name.length < 3){
+      //too short!
+    }else{
+      compareTLDs().then(sortByL()).then(addCommon()).then(
+        this.setState({
+          flag : 'in updateName pt 2',
+          matchTLD : matchTLD
+        })
+      ).then(console.log('this.state.name is ' + this.state.name))
+      /*for (var a in TLDs){
+        if(name.indexOf(TLDs[a]) > 0){
+          const b = name.indexOf(TLDs[a])
+          matchTLD.push((name.slice(0,b) + "." + TLDs[a]))
+        }
+      }
+  }*/
+
+  updateName(e) {
+    this.setState({name : e.target.value.toUpperCase()})
+    const name = e.target.value.toUpperCase()
+    const TLDs = this.state.TLDs
+    var matchTLD = []
+
+    function compareTLDs(){
+      console.log("in compareTLDs")
+      for (var a in TLDs){
+        if(name.indexOf(TLDs[a]) > 0){
+          const b = name.indexOf(TLDs[a])
+          matchTLD.push((name.slice(0,b) + "." + TLDs[a]))
+        }
+      }
+      return Promise.resolve()
+    }
+
+    function sortByL(){
+      console.log('in sortByL')
+      //Sort by length (longer = more complete)
+      matchTLD.sort(function(a, b) {
+        return b.length - a.length //||  sort by length, if equal then
+               //a.localeCompare(b);     sort by dictionary order -> change to completeness?
+      })
+      return Promise.resolve()
+    }
+
+    function addCommon(){
+      //add common TLDs to front of lists
+      //matchTLD.unshift(name+'.COM', name+'.NET',name+'.ORG',name+'.IO')
+      return Promise.resolve()
+    }
+
+    if (name.length < 3){
+      //too short!
+      this.setState({
+        name : name,
+        matchTLD : []
+      })
+    }else{
+      compareTLDs().then(sortByL()).then(addCommon()).then(
+        this.setState({
+          name : name,
+          flag : 'in updateName pt 2',
+          matchTLD : matchTLD
+        })
+      ).then(console.log('this.state.name is ' + this.state.name))
+      /*for (var a in TLDs){
+        if(name.indexOf(TLDs[a]) > 0){
+          const b = name.indexOf(TLDs[a])
+          matchTLD.push((name.slice(0,b) + "." + TLDs[a]))
+        }*/
+      }
   }
 
   render() {

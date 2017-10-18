@@ -5,7 +5,7 @@ const axios = require('axios')
 router.get('/', function(req, res, next) {
   domain = req.query.domain
 
-  axios({
+  /*axios({
     method : 'get',
     url : 'https://whois-v0.p.mashape.com/check?domain=' + domain,
     headers: {
@@ -27,7 +27,9 @@ router.get('/', function(req, res, next) {
     }else{
     console.log(error.response.status);
     }
-  })
+  })*/
+
+  res.json({available: true})
 
 });
 

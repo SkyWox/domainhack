@@ -44,23 +44,23 @@ a#unknown{
 
 }
 
-a#available
+a#true
 {
   background-color: rgb(173, 232, 134);
   color: rgb(35, 176, 0);
   text-decoration: underline;
 }
 
-a#available:hover{
+a#true:hover{
   color: black;
 }
 
-a#taken{
+a#false{
   color: red;
   text-decoration: none;
 }
 
-a#taken:hover{
+a#false:hover{
   color: pink;
 }
 

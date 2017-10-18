@@ -3,20 +3,25 @@ import './App.css';
 
 class AvailCheck extends Component {
 
-  state = {
-      avail : 'unknown'
-  }
-
-
   componentWillMount (){
-    this.setState({ domain : this.props.domain })
-  }
-
-  componentWillReceiveProps (nextProps){
-    this.setState({ domain : nextProps.domain})
+    this.setState({
+      avail : 'may be available',
+      domain : this.props.domain })
   }
 
   componentDidMount(){
+    this.getWhois()
+  }
+
+  componentWillReceiveProps (nextProps){
+    //update state then fetch availability
+    this.setState({
+      domain : nextProps.domain,
+      avail : 'may be available'
+    }, () => {this.getWhois()})
+  }
+
+  getWhois (){
     var requestURL = new Request('/whois?domain=' + this.state.domain)
     fetch(requestURL)
     .then(res => res.json())
@@ -24,32 +29,43 @@ class AvailCheck extends Component {
     .catch()
   }
 
-  render(){
-    const domain = this.state.domain
+  getResult(avail){
     var result = ''
 
-    switch(this.state.avail){
+    switch(avail){
       case true:
-        result ='available'
+        result ='is available!'
         break;
       case false:
-        result ='taken'
+        result ='is taken'
         break;
       case 'unknown':
-        result = 'unknown'
+        result = 'may be available'
         break;
       case 'bad':
-        result = 'bad'
+        result = 'is a bad domain'
         break;
       default:
-        result = 'unknown'
+        result = 'may be available'
         break;
     }
+    return result
+  }
+
+  getAffLink(domain){
+    const URL = "https://google.com/search?q=" + domain
+    return URL
+  }
+
+  render(){
+    const domain = this.state.domain
+    const result = this.getResult(this.state.avail)
+
     return(
       <li className='URL'>
-        <a target="_blank" href={"https://google.com/search?q=" + domain}
-        id={result}>
-        {domain} is {result}
+        <a target="_blank" href={this.getAffLink(domain)}
+        id={this.state.avail.toString()}>
+        {domain} {result}
         </a>
       </li>
     )

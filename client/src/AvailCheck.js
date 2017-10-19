@@ -1,5 +1,8 @@
 import React, { Component } from 'react';
 import './App.css';
+//prefer not to use lodash schema just for this
+var debounce = require('debounce')
+
 
 class AvailCheck extends Component {
 
@@ -10,7 +13,7 @@ class AvailCheck extends Component {
   }
 
   componentDidMount(){
-    this.getWhois()
+    this.slowgetWhois()
   }
 
   componentWillReceiveProps (nextProps){
@@ -18,8 +21,13 @@ class AvailCheck extends Component {
     this.setState({
       domain : nextProps.domain,
       avail : 'may be available'
-    }, () => {this.getWhois()})
+    }, () => {
+      this.slowgetWhois.clear()
+      this.slowgetWhois()
+    })
   }
+
+  slowgetWhois = debounce(this.getWhois, 200)
 
   getWhois (){
     var requestURL = new Request('/whois?domain=' + this.state.domain)

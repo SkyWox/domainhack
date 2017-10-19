@@ -27,7 +27,7 @@ class AvailCheck extends Component {
     })
   }
 
-  slowgetWhois = debounce(this.getWhois, 200)
+  slowgetWhois = debounce(this.getWhois, 400)
 
   getWhois (){
     var requestURL = new Request('/whois?domain=' + this.state.domain)

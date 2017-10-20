@@ -8,16 +8,13 @@ router.get('/', function(req, res, next) {
   //uncomment below for "offline" testing
   //res.json({available : true})
 
-  //can add info for middleware to res.locals object
-  //https://stackoverflow.com/questions/11337402/is-it-ok-to-add-data-to-the-response-object-in-a-middleware-module-in-express-js
-
   function callWhois(domain){
     axios({
       method : 'get',
       url : 'https://whois-v0.p.mashape.com/check?domain=' + domain,
       timeout : 10000,
       headers: {
-        'X-Mashape-Key' : 'qxFuJeqk5Gmsh20KuhIstgzfK3LZp1JZSydjsn0gSPaWScdHAB'
+        'X-Mashape-Key' : process.env.WHOIS_MASHAPE_KEY
       }
     })
     .then(resp => {

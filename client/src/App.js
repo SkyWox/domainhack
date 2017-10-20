@@ -39,7 +39,6 @@ class App extends Component {
     var matchTLD = []
 
     if (name.length < 3){
-      //if user erases text, remove old
       this.setState({matchTLD : []})
     }else{
       for (var a in TLDs){

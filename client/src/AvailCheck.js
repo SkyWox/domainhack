@@ -27,14 +27,16 @@ class AvailCheck extends Component {
     })
   }
 
-  slowgetWhois = debounce(this.getWhois, 1000)
+  slowgetWhois = debounce(this.getWhois, 800)
 
   getWhois (){
-    var requestURL = new Request('/whois?domain=' + this.state.domain)
-    fetch(requestURL)
-    .then(res => res.json())
-    .then(res => {this.setState({ avail : res.available})})
-    .catch()
+    if(this.refs.mount){
+      var requestURL = new Request('/whois?domain=' + this.state.domain)
+      fetch(requestURL)
+      .then(res => res.json())
+      .then(res => {this.setState({ avail : res.available})})
+      .catch()
+    }
   }
 
   getResult(avail){
@@ -71,7 +73,7 @@ class AvailCheck extends Component {
     const result = this.getResult(this.state.avail)
 
     return(
-      <li className='URL'>
+      <li className='URL' ref='mount'>
         <a target="_blank" href={this.getAffLink(domain)}
         id={this.state.avail.toString()}>
         {domain} {result}

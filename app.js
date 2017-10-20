@@ -4,10 +4,7 @@ var favicon = require('serve-favicon');
 var logger = require('morgan');
 var cookieParser = require('cookie-parser');
 var bodyParser = require('body-parser');
-var index = require('./routes/index');
-var users = require('./routes/users');
-var whois = require('./routes/whois');
-var tld = require('./routes/tld')
+//var api = require('./routes/api')
 
 var app = express();
 
@@ -23,16 +20,7 @@ app.use(cookieParser());
 //serve static files from React app
 app.use(express.static(path.join(__dirname, 'client/build')));
 
-app.use('/', index);
-app.use('/users', users);
-app.use('/whois', whois);
-app.use('/tld', tld);
-
-// The "catchall" handler: for any request that doesn't
-// match one above, send back React's index.html file.
-app.get('*', (req, res) => {
-  res.sendFile(path.join(__dirname+'/client/build/index.html'));
-});
+app.use(require('./routes'));
 
 const port = process.env.PORT || 5000;
 app.listen(port);

@@ -27,7 +27,7 @@ class AvailCheck extends Component {
     })
   }
 
-  slowgetWhois = debounce(this.getWhois, 400)
+  slowgetWhois = debounce(this.getWhois, 1000)
 
   getWhois (){
     var requestURL = new Request('/whois?domain=' + this.state.domain)
@@ -61,7 +61,9 @@ class AvailCheck extends Component {
   }
 
   getAffLink(domain){
-    const URL = "https://google.com/search?q=" + domain
+    domain = domain.replace(/\./g, "%2E")
+    const URL = "http://shareasale.com/r.cfm?b=467188&u=1627081&m=46483&urllink=www%2Enamecheap%2Ecom%2Fdomains%2Fregistration%2Fresults%2Easpx%3Fdomain%3D" + domain
+    console.log(URL)
     return URL
   }
 

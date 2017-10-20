@@ -8,6 +8,9 @@ router.get('/', function(req, res, next) {
   //uncomment below for "offline" testing
   //res.json({available : true})
 
+  //can add info for middleware to res.locals object
+  //https://stackoverflow.com/questions/11337402/is-it-ok-to-add-data-to-the-response-object-in-a-middleware-module-in-express-js
+
   function callWhois(domain){
     axios({
       method : 'get',

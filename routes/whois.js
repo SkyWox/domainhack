@@ -4,9 +4,9 @@ const axios = require('axios')
 
 router.get('/', function(req, res, next) {
   dom = req.query.domain
-  //callWhois(dom)
+  callWhois(dom)
   //uncomment below for "offline" testing
-  res.json({available : true})
+  //res.json({available : true})
 
   function callWhois(domain){
     axios({

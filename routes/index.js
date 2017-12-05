@@ -1,14 +1,17 @@
-var express = require('express');
-var router = express.Router();
+var express = require('express')
+var router = express.Router()
 //var whois = require('./whois')
-//var app = express()
+
 //start client-defined timeout at 10 sec
-//var clientTimeout = 10000
+var clientTimeout = 10001
 
-router.use('/users', require('./users'));
-router.use('/tld', require('./tld'));
-router.use('/whois', require('./whois'));
+router.use('/users', require('./users'))
+router.use('/tld', require('./tld'))
 
+router.use('/whois', (req, res, next) => {
+	req.setTimeout(clientTimeout)
+	next()
+})
 /*
 Attempt to adjust timing based on delay
 https://stackoverflow.com/questions/11337402/is-it-ok-to-add-data-to-the-response-object-in-a-middleware-module-in-express-js
@@ -31,8 +34,9 @@ router.use('/whois', (req, res) => {
   res.json({available : false})
 })
 */
+router.use('/whois', require('./whois'))
 
 router.get('*', (req, res) => {
-  res.sendFile(path.join(__dirname+'/client/build/index.html'));
-});
-module.exports = router;
+	res.sendFile(path.join(__dirname + '/client/build/index.html'))
+})
+module.exports = router

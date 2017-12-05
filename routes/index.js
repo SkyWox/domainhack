@@ -1,12 +1,11 @@
 var express = require('express')
 var router = express.Router()
-//var whois = require('./whois')
 
 //start client-defined timeout at 10 sec
 var clientTimeout = 10001
 
-router.use('/users', require('./users'))
 router.use('/tld', require('./tld'))
+router.use('/referral', require('./referral'))
 
 router.use('/whois', (req, res, next) => {
 	req.setTimeout(clientTimeout)

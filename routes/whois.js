@@ -24,14 +24,16 @@ router.get('/', function(req, res, next) {
 			.catch(error => {
 				if (error.code === 'ECONNABORTED') {
 					console.log('request-defined timeout on ' + domain + ' restarting')
-					process.nextTick(() => callWhois(domain))
+					//process.nextTick(() => callWhois(domain))
+					res.json({ available: 'bad' })
 				} else if (error.response.status === 404) {
 					console.log('invalid domain ' + domain)
 					res.json({ available: 'bad' })
 				} else if (error.response.status === 504) {
 					console.log('timeout on ' + domain + ' restarting')
 					//try again. don't send back a res so that the client waits
-					process.nextTick(() => callWhois(domain))
+					//process.nextTick(() => callWhois(domain))
+					res.json({ available: 'bad' })
 				} else {
 					console.log(error)
 					res.json({ available: 'unknown' })

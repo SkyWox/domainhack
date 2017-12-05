@@ -1,87 +1,101 @@
-import React, { Component } from 'react';
-import './App.css';
+import React, { Component } from 'react'
+import './App.css'
+import { Button } from 'react-bootstrap'
+var axios = require('axios')
 //prefer not to use lodash schema just for this
 var debounce = require('debounce')
 
-
 class AvailCheck extends Component {
+	componentWillMount() {
+		this.setState({
+			avail: 'may be available',
+			domain: this.props.domain,
+			link: 'www.namecheap.com'
+		})
+	}
 
-  componentWillMount (){
-    this.setState({
-      avail : 'may be available',
-      domain : this.props.domain })
-  }
+	componentDidMount() {
+		this.slowgetWhois()
+		this.getAffLink()
+	}
 
-  componentDidMount(){
-    this.slowgetWhois()
-  }
+	componentWillReceiveProps(nextProps) {
+		//update state then fetch availability
+		this.setState(
+			{
+				domain: nextProps.domain,
+				avail: 'may be available'
+			},
+			() => {
+				this.slowgetWhois.clear()
+				this.slowgetWhois()
+			}
+		)
+	}
 
-  componentWillReceiveProps (nextProps){
-    //update state then fetch availability
-    this.setState({
-      domain : nextProps.domain,
-      avail : 'may be available'
-    }, () => {
-      this.slowgetWhois.clear()
-      this.slowgetWhois()
-    })
-  }
+	slowgetWhois = debounce(this.getWhois, 800)
 
-  slowgetWhois = debounce(this.getWhois, 800)
+	getWhois() {
+		if (this.refs.mount) {
+			var requestURL = new Request('/whois?domain=' + this.state.domain)
+			fetch(requestURL)
+				.then(res => res.json())
+				.then(res => {
+					this.setState({ avail: res.available })
+				})
+				.catch()
+		}
+	}
 
-  getWhois (){
-    if(this.refs.mount){
-      var requestURL = new Request('/whois?domain=' + this.state.domain)
-      fetch(requestURL)
-      .then(res => res.json())
-      .then(res => {this.setState({ avail : res.available})})
-      .catch()
-    }
-  }
+	getResult(avail) {
+		var result = ''
 
-  getResult(avail){
-    var result = ''
+		switch (avail) {
+			case true:
+				result = 'is available!'
+				break
+			case false:
+				result = 'is taken'
+				break
+			case 'unknown':
+				result = 'may be available'
+				break
+			case 'bad':
+				result = 'is a bad domain'
+				break
+			default:
+				result = 'may be available'
+				break
+		}
+		return result
+	}
 
-    switch(avail){
-      case true:
-        result ='is available!'
-        break;
-      case false:
-        result ='is taken'
-        break;
-      case 'unknown':
-        result = 'may be available'
-        break;
-      case 'bad':
-        result = 'is a bad domain'
-        break;
-      default:
-        result = 'may be available'
-        break;
-    }
-    return result
-  }
+	getAffLink() {
+		var domain = this.props.domain.replace(/\./g, '%2E')
+		axios
+			.post('/referral', { domain: domain })
+			.then(link => {
+				this.setState({ link: link.data })
+			})
+			.catch(error => console.log(error))
+	}
 
-  getAffLink(domain){
-    domain = domain.replace(/\./g, "%2E")
-    const URL = "http://shareasale.com/r.cfm?b=467188&u=1627081&m=46483&urllink=www%2Enamecheap%2Ecom%2Fdomains%2Fregistration%2Fresults%2Easpx%3Fdomain%3D" + domain
-    return URL
-  }
+	render() {
+		const domain = this.props.domain
+		const result = this.getResult(this.state.avail)
 
-  render(){
-    const domain = this.state.domain
-    const result = this.getResult(this.state.avail)
-
-    return(
-      <li className='URL' ref='mount'>
-        <a target="_blank" href={this.getAffLink(domain)}
-        id={this.state.avail.toString()}>
-        {domain} {result}
-        </a>
-      </li>
-    )
-  }
-
+		return (
+			<li className="URL" ref="mount">
+				<Button
+					bsStyle="link"
+					target="_blank"
+					href={this.state.link}
+					id={this.state.avail.toString()}>
+					{domain} {result}
+				</Button>
+			</li>
+		)
+	}
 }
 
-export default AvailCheck;
+export default AvailCheck

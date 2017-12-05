@@ -1,13 +1,13 @@
 var express = require('express');
 var router = express.Router();
-var whois = require('./whois')
-var app = express()
+//var whois = require('./whois')
+//var app = express()
 //start client-defined timeout at 10 sec
 //var clientTimeout = 10000
 
 router.use('/users', require('./users'));
 router.use('/tld', require('./tld'));
-router.use('/whois', whois);
+router.use('/whois', require('./whois'));
 
 /*
 Attempt to adjust timing based on delay

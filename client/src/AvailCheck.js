@@ -27,6 +27,7 @@ class AvailCheck extends Component {
 				avail: 'may be available'
 			},
 			() => {
+				this.getAffLink()
 				this.slowgetWhois.clear()
 				this.slowgetWhois()
 			}

@@ -19,24 +19,25 @@ router.get('/', function(req, res, next) {
 		})
 			.then(resp => {
 				console.log(domain + ' is ' + resp.data.available)
-				res.json(resp.data)
+				res.send(resp.data)
 			})
 			.catch(error => {
+				console.log(error)
 				if (error.code === 'ECONNABORTED') {
 					console.log('request-defined timeout on ' + domain + ' restarting')
 					//process.nextTick(() => callWhois(domain))
-					res.json({ available: 'bad' })
+					res.send({ available: 'bad' }).status(444)
 				} else if (error.response.status === 404) {
 					console.log('invalid domain ' + domain)
-					res.json({ available: 'bad' })
+					res.send({ available: 'bad' })
 				} else if (error.response.status === 504) {
 					console.log('timeout on ' + domain + ' restarting')
 					//try again. don't send back a res so that the client waits
 					//process.nextTick(() => callWhois(domain))
-					res.json({ available: 'bad' })
+					res.send({ available: 'bad' })
 				} else {
 					console.log(error)
-					res.json({ available: 'unknown' })
+					res.send({ available: 'bad' })
 				}
 			})
 	}

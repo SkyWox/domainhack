@@ -38,11 +38,13 @@ class AvailCheck extends Component {
 
 	getWhois() {
 		if (this.refs.mount) {
-			var requestURL = new Request('/whois?domain=' + this.state.domain)
-			fetch(requestURL)
-				.then(res => res.json())
+			axios
+				.get('/whois?domain=' + this.state.domain)
 				.then(res => {
-					this.setState({ avail: res.available })
+					if (res.status === 200) {
+						console.log(this.state.domain + ' is ' + res.data.available)
+						this.setState({ avail: res.data.available })
+					}
 				})
 				.catch()
 		}

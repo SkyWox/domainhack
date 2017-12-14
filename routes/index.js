@@ -9,8 +9,8 @@ router.use('/tld', require('./tld'))
 router.use('/referral', require('./referral'))
 
 router.use('/whois', (req, res, next) => {
-	req.setTimeout(clientTimeout)
-	next()
+  req.setTimeout(clientTimeout)
+  next()
 })
 /*
 Attempt to adjust timing based on delay
@@ -37,6 +37,6 @@ router.use('/whois', (req, res) => {
 router.use('/whois', require('./whois'))
 
 router.get('*', (req, res) => {
-	res.sendFile(path.join(__dirname + '/client/build/index.html'))
+  res.sendFile(path.join(__dirname + '/client/build/index.html'))
 })
 module.exports = router

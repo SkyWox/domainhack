@@ -6,99 +6,104 @@ var axios = require('axios')
 var debounce = require('debounce')
 
 class AvailCheck extends Component {
-	componentWillMount() {
-		this.setState({
-			avail: 'may be available',
-			domain: this.props.domain,
-			link: 'www.namecheap.com'
-		})
-	}
+  componentWillMount() {
+    this.setState({
+      avail: 'may be available',
+      domain: this.props.domain,
+      link: 'www.namecheap.com'
+    })
+  }
 
-	componentDidMount() {
-		this.slowgetWhois()
-		this.getAffLink()
-	}
+  componentDidMount() {
+    this.slowgetWhois()
+    this.getAffLink()
+  }
 
-	componentWillReceiveProps(nextProps) {
-		//update state then fetch availability
-		this.setState(
-			{
-				domain: nextProps.domain,
-				avail: 'may be available'
-			},
-			() => {
-				this.getAffLink()
-				this.slowgetWhois.clear()
-				this.slowgetWhois()
-			}
-		)
-	}
+  componentWillReceiveProps(nextProps) {
+    //update state then fetch availability
+    this.setState(
+      {
+        domain: nextProps.domain,
+        avail: 'may be available'
+      },
+      () => {
+        this.getAffLink()
+        this.slowgetWhois.clear()
+        this.slowgetWhois()
+      }
+    )
+  }
 
-	slowgetWhois = debounce(this.getWhois, 800)
+  slowgetWhois = debounce(this.getWhois, 800)
 
-	getWhois() {
-		if (this.refs.mount) {
-			axios
-				.get('/whois?domain=' + this.state.domain)
-				.then(res => {
-					if (res.status === 200) {
-						console.log(this.state.domain + ' is ' + res.data.available)
-						this.setState({ avail: res.data.available })
-					}
-				})
-				.catch()
-		}
-	}
+  getWhois() {
+    if (this.refs.mount) {
+      axios({
+        method: 'GET',
+        url: '/whois?domain=' + this.state.domain,
+        xsrfHeaderName: 'X-CSRFToken'
+      })
+        .then(res => {
+          if (res.status === 200) {
+            this.setState({ avail: res.data.available })
+          }
+        })
+        .catch()
+    }
+  }
 
-	getResult(avail) {
-		var result = ''
+  getResult(avail) {
+    var result = ''
 
-		switch (avail) {
-			case true:
-				result = 'is available!'
-				break
-			case false:
-				result = 'is taken'
-				break
-			case 'unknown':
-				result = 'may be available'
-				break
-			case 'bad':
-				result = 'is a bad domain'
-				break
-			default:
-				result = 'may be available'
-				break
-		}
-		return result
-	}
+    switch (avail) {
+      case true:
+        result = 'is available!'
+        break
+      case false:
+        result = 'is taken'
+        break
+      case 'unknown':
+        result = 'may be available'
+        break
+      case 'bad':
+        result = 'is a bad domain'
+        break
+      default:
+        result = 'may be available'
+        break
+    }
+    return result
+  }
 
-	getAffLink() {
-		var domain = this.props.domain.replace(/\./g, '%2E')
-		axios
-			.post('/referral', { domain: domain })
-			.then(link => {
-				this.setState({ link: link.data })
-			})
-			.catch(error => console.log(error))
-	}
+  getAffLink() {
+    axios({
+      method: 'GET',
+      url: '/referral?domain=' + this.props.domain,
+      xsrfHeaderName: 'X-CSRFToken'
+    })
+      .then(link => {
+        this.setState({ link: link.data })
+      })
+      .catch(error => console.log(error))
+  }
 
-	render() {
-		const domain = this.props.domain
-		const result = this.getResult(this.state.avail)
+  render() {
+    const domain = this.props.domain
+    const result = this.getResult(this.state.avail)
 
-		return (
-			<li className="URL" ref="mount">
-				<Button
-					bsStyle="link"
-					target="_blank"
-					href={this.state.link}
-					id={this.state.avail.toString()}>
-					{domain} {result}
-				</Button>
-			</li>
-		)
-	}
+    return (
+      <li className="URL" ref="mount">
+        <Button
+          bsStyle="link"
+          target="_blank"
+          href={this.state.link}
+          id={this.state.avail.toString()}
+        >
+          {domain} {result}
+        </Button>
+      </li>
+    )
+  }
 }
 
 export default AvailCheck

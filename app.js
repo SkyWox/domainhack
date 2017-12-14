@@ -4,6 +4,7 @@ var favicon = require('serve-favicon')
 var logger = require('morgan')
 var cookieParser = require('cookie-parser')
 var bodyParser = require('body-parser')
+var csrf = require('csurf')
 if (process.env.NODE_ENV !== 'production') {
   require('dotenv').load()
 }
@@ -31,12 +32,20 @@ app.use(cookieParser())
 //serve static files from React app
 app.use(express.static(path.join(__dirname, 'client/build')))
 
-app.use(require('./routes'))
-
 const port = process.env.PORT || 5000
 app.listen(port)
 
 console.log(`Express server listening on ${port}`)
+
+//csrf auth
+app.use(csrf({ cookie: true }))
+app.use('/', function(req, res, next) {
+  res.cookie('XRSF-TOKEN', req.csrfToken())
+  res.locals.csrftoken = req.csrfToken()
+  next()
+})
+
+app.use(require('./routes'))
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {

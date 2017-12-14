@@ -8,20 +8,20 @@
 		"heroku-postbuild": "cd client && npm install --only=dev && npm install && npm run build"
 	},
 	"dependencies": {
-		"async": "^2.5.0",
-		"axios": "^0.16.2",
-		"body-parser": "~1.17.1",
+		"async": "^2.6.0",
+		"axios": "^0.17.1",
+		"body-parser": "^1.18.2",
 		"cookie-parser": "~1.4.3",
-		"debug": "^2.6.9",
+		"debug": "^3.1.0",
 		"dotenv": "^4.0.0",
 		"express": "^4.16.2",
 		"jade": "~1.11.0",
-		"morgan": "^1.8.2",
+		"morgan": "^1.9.0",
 		"serve-favicon": "^2.4.5"
 	},
 	"devDependencies": {
 		"nodemon": "^1.12.1",
-		"prettier": "^1.9.1"
+		"prettier": "^1.9.2"
 	},
 	"nodemonConfig": {
 		"ignore": "client/*"

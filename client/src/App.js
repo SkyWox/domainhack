@@ -26,12 +26,9 @@ class App extends Component {
       .then(res => {
         if (res.data[0] !== 'failure') {
           this.setState({
-            TLDs: res.data.toString().toUpperCase(),
-            //Rebuild the array making all domains single layer for matching
-            TLDsNoDot: res.data
-              .toString()
-              .toUpperCase()
-              .replace(/\./g, '')
+            TLDs: res.data.map(x => {
+              return x.toUpperCase().replace(/\./g, '')
+            })
           })
         }
       })
@@ -42,7 +39,6 @@ class App extends Component {
     this.setState({ name: e.target.value.toUpperCase() })
     const name = e.target.value.toUpperCase()
     const TLDs = this.state.TLDs
-    const TLDsNoDot = this.state.TLDsNoDot
 
     var matchTLD = []
 
@@ -51,10 +47,10 @@ class App extends Component {
     } else {
       for (var a in TLDs) {
         if (
-          name.indexOf(TLDsNoDot[a]) > 0 &&
-          TLDsNoDot[a].length + name.indexOf(TLDsNoDot[a]) >= name.length
+          name.indexOf(TLDs[a]) > 0 &&
+          TLDs[a].length + name.indexOf(TLDs[a]) >= name.length
         ) {
-          const b = name.indexOf(TLDsNoDot[a])
+          const b = name.indexOf(TLDs[a])
           matchTLD.push(name.slice(0, b) + '.' + TLDs[a])
         }
       }

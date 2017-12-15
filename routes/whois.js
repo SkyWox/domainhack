@@ -8,7 +8,7 @@ router.get('/', function(req, res, next) {
   var attempts = 0
   callWhois(dom)
   //uncomment below for "offline" testing
-  res.json({ available: true })
+  //res.json({ available: true })
 
   function callWhois(domain) {
     while (attempts <= maxAttempts) {

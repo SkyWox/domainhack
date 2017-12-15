@@ -9,7 +9,7 @@ router.use('/tld', require('./tld'))
 router.use('/referral', require('./referral'))
 
 router.use('/whois', (req, res, next) => {
-  req.setTimeout(clientTimeout)
+  //req.setTimeout(clientTimeout)
   next()
 })
 /*

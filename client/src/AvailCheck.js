@@ -16,7 +16,6 @@ class AvailCheck extends Component {
 
   componentDidMount() {
     this.slowgetWhois()
-    this.getAffLink()
   }
 
   componentWillReceiveProps(nextProps) {
@@ -27,7 +26,6 @@ class AvailCheck extends Component {
         avail: 'may be available'
       },
       () => {
-        this.getAffLink()
         this.slowgetWhois.clear()
         this.slowgetWhois()
       }
@@ -37,6 +35,7 @@ class AvailCheck extends Component {
   slowgetWhois = debounce(this.getWhois, 800)
 
   getWhois() {
+    this.getAffLink()
     if (this.refs.mount) {
       axios({
         method: 'GET',
@@ -45,6 +44,7 @@ class AvailCheck extends Component {
       })
         .then(res => {
           if (res.status === 200) {
+            console.log('setting res')
             this.setState({ avail: res.data.available })
           }
         })

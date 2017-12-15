@@ -5,6 +5,8 @@ var logger = require('morgan')
 var cookieParser = require('cookie-parser')
 var bodyParser = require('body-parser')
 var csrf = require('csurf')
+var responseTime = require('response-time')
+
 if (process.env.NODE_ENV !== 'production') {
   require('dotenv').load()
 }

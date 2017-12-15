@@ -7,10 +7,9 @@ var client = require('redis').createClient(process.env.REDIS_URL)
 
 router.get('/', function(req, res, next) {
   dom = req.query.domain
+  timeout = process.env.INITIAL_TIMEOUT
 
   //intercept and run against redis cache
-
-  var domain = req.params.domain
   client.get(dom, function(err, result) {
     if (result) {
       res.send({
@@ -18,7 +17,6 @@ router.get('/', function(req, res, next) {
         source: 'redis cache'
       })
     } else {
-      var timeout = 5000
       callWhois(dom)
       //uncomment below for "offline" testing
       //res.json({ available: true })

@@ -3,8 +3,7 @@ var router = express.Router()
 const axios = require('axios')
 var axiosRetry = require('axios-retry')
 
-var redis = require('redis')
-var client = redis.createClient()
+var client = require('redis').createClient(process.env.REDIS_URL)
 
 router.get('/', function(req, res, next) {
   dom = req.query.domain
@@ -12,9 +11,12 @@ router.get('/', function(req, res, next) {
   //intercept and run against redis cache
 
   var domain = req.params.domain
-  client.get(domain, function(err, result) {
+  client.get(dom, function(err, result) {
     if (result) {
-      res.send({ available: result })
+      res.send({
+        available: result === 'true',
+        source: 'redis cache'
+      })
     } else {
       var timeout = 5000
       callWhois(dom)
@@ -34,10 +36,9 @@ router.get('/', function(req, res, next) {
           .then(resp => {
             console.log(domain + ' is ' + resp.data.available)
             client.setex(dom, 300, resp.data.available)
-            res.send(resp.data)
+            res.send({ available: resp.data.available })
           })
           .catch(error => {
-            console.log('error area')
             if (error.code === 'ECONNABORTED') {
               console.log('request-defined timeout on ' + domain)
               res.send({ available: 'may be available' }).status(444)

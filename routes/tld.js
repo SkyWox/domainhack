@@ -10,7 +10,7 @@ router.get('/', function(req, res, next) {
   //intercept and run against redis cache
   client.get('0TLD', function(err, result) {
     if (result) {
-      res.send(Array.from(result))
+      res.send(result.split(','))
     } else {
       axios({
         method: 'get',
@@ -20,15 +20,7 @@ router.get('/', function(req, res, next) {
         }
       })
         .then(resp => {
-          const listed = Array.asList(resp.data)
-          console.log(resp.data)
-          Arrays.stream(resp.data)
-            .boxed()
-            .collect(Collectors.toList())
-          //console.log(resp.data)
-          //console.log(listed)
-          client.setex('0TLD', 43200, resp.data)
-
+          client.setex('0TLD', 43200, resp.data.toString())
           res.json(resp.data)
         })
         .catch(error => {

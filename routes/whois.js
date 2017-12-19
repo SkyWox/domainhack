@@ -17,7 +17,6 @@ router.get('/', function(req, res, next) {
         available: result === 'true',
         source: 'redis cache'
       })
-      req.connection.destroy()
     } else {
       next()
     }

@@ -20,6 +20,7 @@ class AvailCheck extends Component {
 
   componentWillReceiveProps(nextProps) {
     //update state then fetch availability
+    console.log('Availcheck updating')
     this.setState(
       {
         domain: nextProps.domain,

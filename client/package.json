@@ -1,24 +1,24 @@
 {
-	"name": "domainhack",
-	"version": "0.1.0",
-	"private": true,
-	"dependencies": {
-		"axios": "^0.16.2",
-		"debounce": "^1.0.2",
-		"lodash": "^4.17.4",
-		"react": "^16.0.0",
-		"react-bootstrap": "^0.31.5",
-		"react-dom": "^16.0.0",
-		"unirest": "^0.5.1"
-	},
-	"devDependencies": {
-		"react-scripts": "1.0.14"
-	},
-	"scripts": {
-		"start": "react-scripts start",
-		"build": "react-scripts build",
-		"test": "react-scripts test --env=jsdom",
-		"eject": "react-scripts eject"
-	},
-	"proxy": "http://192.168.0.102:5000"
+  "name": "domainhack",
+  "version": "0.1.0",
+  "private": true,
+  "dependencies": {
+    "axios": "^0.16.2",
+    "debounce": "^1.0.2",
+    "lodash": "^4.17.4",
+    "react": "^16.0.0",
+    "react-bootstrap": "^0.31.5",
+    "react-dom": "^16.0.0",
+    "unirest": "^0.5.1"
+  },
+  "devDependencies": {
+    "react-scripts": "1.0.14"
+  },
+  "scripts": {
+    "start": "react-scripts start",
+    "build": "react-scripts build",
+    "test": "react-scripts test --env=jsdom",
+    "eject": "react-scripts eject"
+  },
+  "proxy": "http://localhost:5000"
 }

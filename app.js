@@ -12,7 +12,7 @@ if (process.env.NODE_ENV !== 'production') {
 }
 
 var app = express()
-app.use(responseTime())
+//app.use(responseTime())
 
 app.disable('x-powered-by') //hide server tech
 //set security headers

@@ -2,7 +2,6 @@ import React, { Component } from 'react'
 import './App.css'
 import { Button } from 'react-bootstrap'
 var axios = require('axios')
-//prefer not to use lodash schema just for this
 var debounce = require('debounce')
 
 class AvailCheck extends Component {
@@ -19,8 +18,6 @@ class AvailCheck extends Component {
   }
 
   componentWillReceiveProps(nextProps) {
-    //update state then fetch availability
-    console.log('Availcheck updating')
     this.setState(
       {
         domain: nextProps.domain,

@@ -3,3 +3,5 @@ node_js:
   - '8'
 before_script:
   - "cd client && npm install --only=dev && npm install && npm run build"
+notifications:
+  email: false

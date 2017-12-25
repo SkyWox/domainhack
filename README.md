@@ -18,7 +18,7 @@ Make sure you have keys for the following accounts and update them in `.envs` fi
 
 ## Run
 
-Heroku can run this out of the box as long as you have the .env variables set uo and a postgres database provisioned.
+Heroku can run this out of the box as long as you have the .env variables mirrored to the Heroku config and a redis database provisioned.
 
 To run the site locally for development, run this in ../lottery/:
 

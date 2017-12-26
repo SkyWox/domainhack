@@ -2,7 +2,7 @@ import React, { Component } from 'react'
 import './App.css'
 import AvailCheck from './AvailCheck.js'
 var axios = require('axios')
-
+var debounce = require('debounce')
 var TLD = require('./TLD')
 const defaultname = ''
 
@@ -12,11 +12,14 @@ class App extends Component {
       name: defaultname,
       TLDs: TLD,
       matchTLD: [],
-      available: true
+      available: true,
+      successes: 0,
+      fails: 0
     })
   }
 
   componentDidMount() {
+    this.getStats()
     //update TLD list
     axios({
       method: 'GET',
@@ -35,40 +38,64 @@ class App extends Component {
       .catch()
   }
 
+  slowGetStats = debounce(this.getStats, 800)
+
+  getStats() {
+    axios({
+      method: 'GET',
+      url: '/whois/stats',
+      xsrfHeaderName: 'X-CSRFToken'
+    }).then(res => {
+      this.setState({
+        successes: res.data.successes,
+        fails: res.data.fails
+      })
+    })
+  }
+
   updateName(e) {
-    this.setState({ name: e.target.value.toUpperCase() })
-    const name = e.target.value.toUpperCase()
-    const TLDs = this.state.TLDs
+    this.setState({ name: e.target.value.toUpperCase(), matchTLD: [] }, () => {
+      const name = this.state.name
+      const TLDs = this.state.TLDs
 
-    var matchTLD = []
+      var matchTLD = []
 
-    if (name.length < 3) {
-      this.setState({ matchTLD: [] })
-    } else {
-      for (var a in TLDs) {
-        if (
-          name.indexOf(TLDs[a]) > 0 &&
-          TLDs[a].length + name.indexOf(TLDs[a]) >= name.length
-        ) {
-          const b = name.indexOf(TLDs[a])
-          matchTLD.push(name.slice(0, b) + '.' + TLDs[a])
+      if (name.length < 3) {
+        this.setState({ matchTLD: [] })
+      } else {
+        for (var a in TLDs) {
+          if (
+            name.indexOf(TLDs[a]) > 0 &&
+            TLDs[a].length + name.indexOf(TLDs[a]) >= name.length
+          ) {
+            const b = name.indexOf(TLDs[a])
+            matchTLD.push(name.slice(0, b) + '.' + TLDs[a])
+          }
         }
-      }
-      matchTLD.unshift(
-        name + '.COM',
-        name + '.NET',
-        name + '.ORG',
-        name + '.IO'
-      )
+        matchTLD.unshift(
+          name + '.COM',
+          name + '.NET',
+          name + '.ORG',
+          name + '.IO'
+        )
 
-      this.setState({ matchTLD: matchTLD })
-    }
+        this.setState({ matchTLD: matchTLD })
+      }
+      this.slowGetStats.clear()
+      this.slowGetStats()
+    })
   }
 
   render() {
     return (
       <div className="App">
         <h1>hack a domain</h1>
+        {this.state.fails + this.state.successes > 0 && (
+          <h2>
+            {this.state.successes} / {this.state.successes + this.state.fails}
+            <br />requests successful in the past hour
+          </h2>
+        )}
 
         <h1>
           <input

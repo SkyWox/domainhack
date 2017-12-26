@@ -14,20 +14,8 @@ class AvailCheck extends Component {
   }
 
   componentDidMount() {
+    this.slowgetWhois.clear()
     this.slowgetWhois()
-  }
-
-  componentWillReceiveProps(nextProps) {
-    this.setState(
-      {
-        domain: nextProps.domain,
-        avail: 'may be available'
-      },
-      () => {
-        this.slowgetWhois.clear()
-        this.slowgetWhois()
-      }
-    )
   }
 
   slowgetWhois = debounce(this.getWhois, 800)
@@ -85,9 +73,6 @@ class AvailCheck extends Component {
   }
 
   render() {
-    const domain = this.props.domain
-    const result = this.getResult(this.state.avail)
-
     return (
       <li className="URL" ref="mount">
         <Button
@@ -96,7 +81,7 @@ class AvailCheck extends Component {
           href={this.state.link}
           id={this.state.avail.toString()}
         >
-          {domain} {result}
+          {this.props.domain} {this.getResult(this.state.avail)}
         </Button>
       </li>
     )

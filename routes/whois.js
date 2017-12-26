@@ -36,7 +36,7 @@ router.get('/', function(req, res, next) {
 
 router.get('/', function(req, res, next) {
   //uncomment below for "offline" testing
-  res.json({ available: true })
+  //res.json({ available: true })
 
   axios({
     method: 'get',

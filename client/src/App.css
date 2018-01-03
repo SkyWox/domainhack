@@ -1,7 +1,14 @@
+html,
+body {
+  background: linear-gradient(to bottom left, #99ffd6, #80d4ff) no-repeat center
+    center fixed;
+}
+
 .App {
   text-align: center;
-  font-family: "Open Sans", sans-serif;
+  font-family: 'Open Sans', sans-serif;
   width: 100%;
+  color: white;
 }
 
 .App-logo {
@@ -29,48 +36,51 @@ input {
   height: 55px;
   border-radius: 7px;
   border-style: groove;
+  color: black;
 }
 
-.URL{
+.URL {
   list-style-type: none;
 }
 
-a{
+a {
   color: black;
   text-decoration: underline;
 }
 
-a#unknown{
-
+a#unknown {
 }
 
-a#true
-{
+a#true {
   background-color: rgb(173, 232, 134);
   color: rgb(35, 176, 0);
   text-decoration: underline;
 }
 
-a#true:hover{
+a#true:hover {
   color: black;
 }
 
-a#false{
+a#false {
   color: red;
   text-decoration: none;
 }
 
-a#false:hover{
+a#false:hover {
   color: pink;
 }
 
-a#bad{
+a#bad {
   text-indent: 100%;
   white-space: nowrap;
   overflow: hidden;
 }
 
 @keyframes App-logo-spin {
-  from { transform: rotate(0deg); }
-  to { transform: rotate(360deg); }
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(360deg);
+  }
 }

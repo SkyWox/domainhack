@@ -3,6 +3,8 @@ import './App.css'
 import { Button } from 'react-bootstrap'
 var axios = require('axios')
 var debounce = require('debounce')
+var CancelToken = axios.CancelToken
+var source = CancelToken.source()
 
 class AvailCheck extends Component {
   componentWillMount() {
@@ -18,10 +20,25 @@ class AvailCheck extends Component {
     this.slowgetWhois()
   }
 
+  componentWillUnmount() {
+    if (
+      this.state.avail === 'may be available' ||
+      this.state.link === 'www.namecheap.com'
+    ) {
+      source.cancel()
+    }
+  }
+
+  componentWillUpdate() {
+    source = new CancelToken.source()
+  }
+
   slowgetWhois = debounce(this.getWhois, 800)
+  slowgetAffLink = debounce(this.getAffLink, 400)
 
   getWhois() {
-    this.getAffLink()
+    this.slowgetAffLink.clear()
+    this.slowgetAffLink()
     if (this.refs.mount) {
       axios({
         method: 'GET',
@@ -33,7 +50,11 @@ class AvailCheck extends Component {
             this.setState({ avail: res.data.available })
           }
         })
-        .catch()
+        .catch(function(thrown) {
+          if (axios.isCancel(thrown)) {
+            console.log('WhoIs request canceled')
+          }
+        })
     }
   }
 
@@ -64,12 +85,11 @@ class AvailCheck extends Component {
     axios({
       method: 'GET',
       url: '/referral?domain=' + this.props.domain,
-      xsrfHeaderName: 'X-CSRFToken'
+      xsrfHeaderName: 'X-CSRFToken',
+      cancelToken: source.token
+    }).then(link => {
+      this.setState({ link: link.data })
     })
-      .then(link => {
-        this.setState({ link: link.data })
-      })
-      .catch(error => console.log(error))
   }
 
   render() {

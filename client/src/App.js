@@ -25,17 +25,15 @@ class App extends Component {
       method: 'GET',
       url: '/tld',
       xsrfHeaderName: 'X-CSRFToken'
-    })
-      .then(res => {
-        if (res.data[0] !== 'failure') {
-          this.setState({
-            TLDs: res.data.map(x => {
-              return x.toUpperCase().replace(/\./g, '')
-            })
+    }).then(res => {
+      if (res.data[0] !== 'failure') {
+        this.setState({
+          TLDs: res.data.map(x => {
+            return x.toUpperCase().replace(/\./g, '')
           })
-        }
-      })
-      .catch()
+        })
+      }
+    })
   }
 
   slowGetStats = debounce(this.getStats, 800)
@@ -90,12 +88,6 @@ class App extends Component {
     return (
       <div className="App">
         <h1>hack a domain</h1>
-        {this.state.fails + this.state.successes > 0 && (
-          <h2>
-            {this.state.successes} / {this.state.successes + this.state.fails}
-            <br />requests successful in the past hour
-          </h2>
-        )}
 
         <h1>
           <input
@@ -112,7 +104,7 @@ class App extends Component {
           />
         </h1>
         {//check for sufficient namespace
-        this.state.name.length > 3 ? (
+        this.state.name.length > 2 ? (
           <div>Click a domain to buy:</div>
         ) : (
           <div>Please enter at least 3 characters</div>
@@ -122,6 +114,12 @@ class App extends Component {
             <AvailCheck domain={domain} key={index} />
           ))}
         </div>
+        {this.state.fails + this.state.successes > 0 && (
+          <h2>
+            {this.state.successes} / {this.state.successes + this.state.fails}
+            <br />requests successful in the past hour
+          </h2>
+        )}
       </div>
     )
   }

@@ -59,8 +59,7 @@ router.get('/', function(req, res, next) {
         res.send({ available: 'may be available' }).status(503)
         var numFails = 0
         client.hgetallAsync('00Fails').then(result => {
-          console.log(result)
-          const numFails = parseInt(result.num)
+          if (result) numFails = parseInt(result.num)
           const newavg = 0
           client.hmset('00Fails', 'num', numFails + 1, 'avg', newavg)
           client.expire('00Fails', 3600)

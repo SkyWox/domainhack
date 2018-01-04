@@ -11,7 +11,9 @@ class AvailCheck extends Component {
     this.setState({
       avail: 'may be available',
       domain: this.props.domain,
-      link: 'www.namecheap.com'
+      link: 'www.namecheap.com',
+      requestFailed: false,
+      retries: 2
     })
   }
 
@@ -37,8 +39,10 @@ class AvailCheck extends Component {
   slowgetAffLink = debounce(this.getAffLink, 400)
 
   getWhois() {
-    this.slowgetAffLink.clear()
-    this.slowgetAffLink()
+    if (this.state.domain === 'www.namecheap.com') {
+      this.slowgetAffLink.clear()
+      this.slowgetAffLink()
+    }
     if (this.refs.mount) {
       axios({
         method: 'GET',
@@ -100,6 +104,7 @@ class AvailCheck extends Component {
           target="_blank"
           href={this.state.link}
           id={this.state.avail.toString()}
+          failed={this.state.requestFailed.toString()}
         >
           {this.props.domain} {this.getResult(this.state.avail)}
         </Button>

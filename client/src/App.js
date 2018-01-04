@@ -115,10 +115,10 @@ class App extends Component {
           ))}
         </div>
         {this.state.fails + this.state.successes > 0 && (
-          <h2>
+          <h3>
             {this.state.successes} / {this.state.successes + this.state.fails}
             <br />requests successful in the past hour
-          </h2>
+          </h3>
         )}
       </div>
     )

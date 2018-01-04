@@ -37,7 +37,14 @@ router.get('/', function(req, res, next) {
 router.get('/', function(req, res, next) {
   //uncomment below for "offline" testing
   //res.json({ available: true })
-
+  var startTime = process.hrtime()
+  function elapsedTime() {
+    elapsedTime = process.hrtime(startTime)
+    elapsedTime = parseFloat(elapsedTime[0] + elapsedTime[1] / 1e9).toPrecision(
+      4
+    )
+    return elapsedTime
+  }
   axios({
     method: 'get',
     url: 'https://whois-v0.p.mashape.com/check?domain=' + req.query.domain,
@@ -52,11 +59,13 @@ router.get('/', function(req, res, next) {
       client.setex(req.query.domain, 300, resp.data.available)
       client.incr('00Successes')
       client.expire('00Sucesses', 3600)
-      res.send({ available: resp.data.available })
+      res.send({ available: resp.data.available, time: elapsedTime() })
     })
     .catch(error => {
       if (error.code === 'ECONNABORTED') {
-        res.send({ available: 'may be available' }).status(503)
+        res
+          .send({ available: 'may be available', time: elapsedTime() })
+          .status(503)
         var numFails = 0
         client.hgetallAsync('00Fails').then(result => {
           if (result) numFails = parseInt(result.num)
@@ -66,16 +75,20 @@ router.get('/', function(req, res, next) {
         })
       } else if (error.response.status === 404) {
         console.log('invalid domain ' + req.query.domain)
-        res.send({ available: 'bad' }).status(404)
+        res.send({ available: 'bad', time: elapsedTime() }).status(404)
       } else if (error.response.status === 504) {
         console.log('3rd party timeout on ' + req.query.domain)
-        res.send({ available: 'may be available' }).status(504)
+        res
+          .send({ available: 'may be available', time: elapsedTime() })
+          .status(504)
       } else if (error.response.status === 502) {
         console.log('bad gateway on ' + req.query.domain)
-        res.send({ available: 'may be available' }).status(502)
+        res
+          .send({ available: 'may be available', time: elapsedTime() })
+          .status(502)
       } else {
         console.log(error)
-        res.send({ available: 'bad' })
+        res.send({ available: 'bad', time: elapsedTime() })
       }
     })
 })

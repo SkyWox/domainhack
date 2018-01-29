@@ -25,8 +25,8 @@
 		"serve-favicon": "^2.4.5"
 	},
 	"devDependencies": {
-		"nodemon": "^1.14.7",
-		"prettier": "^1.9.2"
+		"nodemon": "^1.14.11",
+		"prettier": "^1.10.2"
 	},
 	"nodemonConfig": {
 		"ignore": "client/*"

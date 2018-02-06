@@ -10,7 +10,6 @@ class AvailCheck extends Component {
   componentWillMount() {
     this.setState({
       avail: 'may be available',
-      domain: this.props.domain,
       link: 'www.namecheap.com',
       requestFailed: false,
       retries: 2
@@ -39,14 +38,18 @@ class AvailCheck extends Component {
   slowgetAffLink = debounce(this.getAffLink, 400)
 
   getWhois() {
-    if (this.state.domain === 'www.namecheap.com') {
+    if (this.state.link === 'www.namecheap.com') {
       this.slowgetAffLink.clear()
       this.slowgetAffLink()
     }
     if (this.refs.mount) {
       axios({
         method: 'GET',
-        url: '/whois?domain=' + this.state.domain,
+        url:
+          '/whois?domain=' +
+          this.props.domain +
+          '&time=' +
+          this.props.userTimeout,
         xsrfHeaderName: 'X-CSRFToken'
       })
         .then(res => {
@@ -54,8 +57,9 @@ class AvailCheck extends Component {
             this.setState({ avail: res.data.available })
           }
         })
-        .catch(function(thrown) {
-          if (axios.isCancel(thrown)) {
+        .catch(error => {
+          console.log(error)
+          if (axios.isCancel(error)) {
             console.log('WhoIs request canceled')
           }
         })
@@ -89,8 +93,7 @@ class AvailCheck extends Component {
     axios({
       method: 'GET',
       url: '/referral?domain=' + this.props.domain,
-      xsrfHeaderName: 'X-CSRFToken',
-      cancelToken: source.token
+      xsrfHeaderName: 'X-CSRFToken'
     }).then(link => {
       this.setState({ link: link.data })
     })

@@ -7,7 +7,7 @@ var bluebird = require('bluebird')
 bluebird.promisifyAll(redis.RedisClient.prototype)
 
 var client = redis.createClient(process.env.REDIS_URL)
-const timeout = process.env.INITIAL_TIMEOUT
+var timeout = process.env.INITIAL_TIMEOUT
 const maxAttempts = 2
 //exponential backoff function
 
@@ -45,6 +45,9 @@ router.get('/', function(req, res, next) {
     )
     return elapsedTime
   }
+
+  timeout = req.query.time
+
   axios({
     method: 'get',
     url: 'https://whois-v0.p.mashape.com/check?domain=' + req.query.domain,

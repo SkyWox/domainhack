@@ -14,7 +14,9 @@ class App extends Component {
       matchTLD: [],
       available: true,
       successes: 0,
-      fails: 0
+      fails: 0,
+      userTimeout: 11000,
+      showUserTime: false
     })
   }
 
@@ -24,7 +26,8 @@ class App extends Component {
     axios({
       method: 'GET',
       url: '/tld',
-      xsrfHeaderName: 'X-CSRFToken'
+      xsrfHeaderName: 'X-CSRFToken',
+      headers: { userTimeout: this.state.userTimeout }
     }).then(res => {
       if (res.data[0] !== 'failure') {
         this.setState({
@@ -111,15 +114,13 @@ class App extends Component {
         )}
         <div className="suggestedURLs">
           {this.state.matchTLD.map((domain, index) => (
-            <AvailCheck domain={domain} key={index} />
+            <AvailCheck
+              domain={domain}
+              key={index}
+              userTimeout={this.state.userTimeout}
+            />
           ))}
         </div>
-        {this.state.fails + this.state.successes > 0 && (
-          <h3>
-            {this.state.successes} / {this.state.successes + this.state.fails}
-            <br />requests successful in the past hour
-          </h3>
-        )}
       </div>
     )
   }

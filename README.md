@@ -25,8 +25,8 @@ For example if you want to find domain names for your business, Fiesta Taco, jus
 * FiestaTaco.net is available
 * FiestaTaco.org is available
 * FiestaTaco.io is taken
-* [Fiestat.aco](http://fiestat.aco) is available
-* Fiestata.co is taken
+* [FiestaT.aco](http://fiestat.aco) is available
+* FiestaTa.co is taken
 
 # Features
 

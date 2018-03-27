@@ -90,7 +90,7 @@ class App extends Component {
   render() {
     return (
       <div className="App">
-        <h1>hack a domain</h1>
+        <h1>find a hacked domain name</h1>
 
         <h1>
           <input
